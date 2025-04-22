@@ -4,7 +4,7 @@ module Docs
   class Angular < UrlScraper
     self.type = 'angular'
     self.links = {
-      home: 'https://angular.io/',
+      home: 'https://angular.dev/',
       code: 'https://github.com/angular/angular'
     }
     self.base_url = 'https://angular.io/'
@@ -15,8 +15,8 @@ module Docs
     options[:max_image_size] = 256_000
 
     options[:attribution] = <<-HTML
-      &copy; 2010&ndash;2023 Google, Inc.<br>
-      Licensed under the Creative Commons Attribution License 4.0.
+      Super-powered by Google &copy;2010&ndash;2025.<br />
+      Code licensed under an MIT-style License. Documentation licensed under CC BY 4.0.
     HTML
 
     options[:follow_links] = false
@@ -24,12 +24,13 @@ module Docs
     options[:fix_urls_before_parse] = ->(url) do
       url.sub! %r{\Aguide/}, '/guide/'
       url.sub! %r{\Atutorial/}, '/tutorial/'
+      url.sub! %r{\Atutorials/}, '/tutorials/'
       url.sub! %r{\Aapi/}, '/api/'
       url.sub! %r{\Agenerated/}, '/generated/'
       url
     end
 
-    module Common
+    module JsonNavigation
       private
 
       def initial_urls
@@ -79,12 +80,41 @@ module Docs
         path = path.gsub(/[A-Z_]/) {|s| s.downcase + '_'}
         super
       end
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
+    end
+
+    module Since18
+    end
+
+    version do
+      self.release = '19.2.5'
+      self.base_url = 'https://angular.dev/'
+      self.root_path = 'overview'
+
+      options[:follow_links] = true
+      options[:container] = '.docs-app-main-content'
+
+      html_filters.push 'angular/entries', 'angular/clean_html_v18'
+
+      include Docs::Angular::Since18
+    end
+
+    version do
+      self.release = '18.2.13'
+      self.base_url = 'https://v18.angular.dev/'
+      self.root_path = 'overview'
+
+      options[:follow_links] = true
+      options[:container] = '.docs-viewer'
+
+      html_filters.push 'angular/entries', 'angular/clean_html_v18'
+
+      include Docs::Angular::Since18
     end
 
     version do
       self.release = '17.0.8'
-      self.base_url = 'https://angular.io/'
+      self.base_url = 'https://v17.angular.io/'
       include Docs::Angular::Since12
     end
 
@@ -121,49 +151,49 @@ module Docs
     version '11' do
       self.release = '11.2.14'
       self.base_url = 'https://v11.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '10' do
       self.release = '10.2.3'
       self.base_url = 'https://v10.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '9' do
       self.release = '9.1.12'
       self.base_url = 'https://v9.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '8' do
       self.release = '8.2.14'
       self.base_url = 'https://v8.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '7' do
       self.release = '7.2.15'
       self.base_url = 'https://v7.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '6' do
       self.release = '6.1.10'
       self.base_url = 'https://v6.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '5' do
       self.release = '5.2.11'
       self.base_url = 'https://v5.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '4' do
       self.release = '4.4.6'
       self.base_url = 'https://v4.angular.io/'
-      include Docs::Angular::Common
+      include Docs::Angular::JsonNavigation
     end
 
     version '2' do
