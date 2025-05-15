@@ -11,9 +11,9 @@ module Docs
           '.docs-reference-category'
         ).remove
 
-        # Remove h1 wrapper.
-        css('.docs-page-title h1').each do |node|
-          node.parent.replace(node)
+        # Extract h1s from decorative headers in guide pages.
+        css('.docs-decorative-header-container h1').each do |node|
+          node.parent.parent.parent.replace(node)
         end
 
         # Strip anchor links from headers.

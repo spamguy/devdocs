@@ -84,6 +84,21 @@ module Docs
     end
 
     module Since18
+      def self.handle_redirects
+        lambda do |url|
+          puts "OLD URL = #{url}"
+          url.sub! '/guide/templates/reference-variables', '/guide/templates/variables#template-reference-variables'
+          url.sub! '/guide/signals/inputs', '/guide/components/inputs'
+          url.sub! '/guide/defer', '/guide/templates/defer'
+          url.sub! '/guide/templates/class-binding', '/guide/templates/binding#css-class-and-style-property-bindings'
+          url.sub! %r{/guide/components$}, '/guide/components/anatomy-of-components'
+          url.sub! '/guide/components/importing', '/guide/components/anatomy-of-components#using-components'
+          url.sub! '/guide/templates/property-binding', '/guide/templates/binding#binding-dynamic-properties-and-attributes'
+          url.sub! %r{/guide/ngmodules$}, '/guide/ngmodules/overview'
+          puts "NEW URL = #{url}"
+          url
+        end
+      end
     end
 
     version do
@@ -93,26 +108,28 @@ module Docs
 
       options[:follow_links] = true
       options[:container] = '.docs-app-main-content'
+      options[:fix_urls] = Since18.handle_redirects
 
       html_filters.push 'angular/entries', 'angular/clean_html_v18'
 
       include Docs::Angular::Since18
     end
 
-    version do
+    version '18' do
       self.release = '18.2.13'
       self.base_url = 'https://v18.angular.dev/'
       self.root_path = 'overview'
 
       options[:follow_links] = true
-      options[:container] = '.docs-viewer'
+      options[:container] = '.docs-app-main-content'
+      options[:fix_urls] = Since18.handle_redirects
 
       html_filters.push 'angular/entries', 'angular/clean_html_v18'
 
       include Docs::Angular::Since18
     end
 
-    version do
+    version '17' do
       self.release = '17.0.8'
       self.base_url = 'https://v17.angular.io/'
       include Docs::Angular::Since12
